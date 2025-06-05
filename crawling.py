@@ -58,9 +58,8 @@ def get_homepage_bvids(ps=10):
     url = f'https://api.bilibili.com/x/web-interface/index/top/rcmd?fresh_type=3&ps={ps}'
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
-        # 'Referer': 'https://www.bilibili.com/',
-        # 'Accept': 'application/json, text/plain, */*',
-        # 'Accept-Language': 'zh-CN,zh;q=0.9',
+        # 'Host': 'api.bilibili.com',
+        # 'Referer': f'https://www.bilibili.com/'
     }
     resp = requests.get(url, headers=headers)
     if resp.status_code != 200:
@@ -70,7 +69,7 @@ def get_homepage_bvids(ps=10):
     if data['code'] != 0:
         print(f"API错误: {data['message']}")
         return []
-    bvids = [item['bvid'] for item in data['data'] if 'bvid' in item]
+    bvids = [item['bvid'] for item in data['data']['item'] if 'bvid' in item]
     return bvids
 
 
