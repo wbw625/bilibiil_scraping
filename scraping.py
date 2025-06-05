@@ -33,9 +33,12 @@ def scrape_bilibili_video(video_id):
     # Extracting video information
     title = data.get('title', '')
     description = data.get('desc', '')
+    ptime = data.get('pubdate', 0)
+    danmaku = data.get('stat', {}).get('danmaku', 0)
     likes = data.get('stat', {}).get('like', 0)
     coins = data.get('stat', {}).get('coin', 0)
     favorites = data.get('stat', {}).get('favorite', 0)
+    shares = data.get('stat', {}).get('share', 0)
     views = data.get('stat', {}).get('view', 0)
 
     # 获取 up 主粉丝数
@@ -52,9 +55,12 @@ def scrape_bilibili_video(video_id):
     return {
         'title': title,
         'description': description,
+        'ptime': ptime,
+        'danmaku': danmaku,
         'likes': likes,
         'coins': coins,
         'favorites': favorites,
+        'shares': shares,
         'author_followers': author_followers,
         'views': views
     }

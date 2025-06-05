@@ -47,13 +47,46 @@ def get_video_ids(search_name, pages):
     return bvid_lst
 
 
+def get_homepage_bvids(ps=10):
+    """
+    获取B站首页推荐视频的BV号列表
+    Args:
+        ps (int): 获取的视频数量，最大20
+    Returns:
+        list: BV号列表
+    """
+    url = f'https://api.bilibili.com/x/web-interface/index/top/rcmd?fresh_type=3&ps={ps}'
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
+        # 'Referer': 'https://www.bilibili.com/',
+        # 'Accept': 'application/json, text/plain, */*',
+        # 'Accept-Language': 'zh-CN,zh;q=0.9',
+    }
+    resp = requests.get(url, headers=headers)
+    if resp.status_code != 200:
+        print(f"请求失败: {resp.status_code}")
+        return []
+    data = resp.json()
+    if data['code'] != 0:
+        print(f"API错误: {data['message']}")
+        return []
+    bvids = [item['bvid'] for item in data['data'] if 'bvid' in item]
+    return bvids
+
+
 def main():
     """
     Main function to scrape multiple Bilibili videos.
     """
-    search_name = 'Python爬虫'
-    pages = 5  # Number of pages to scrape
-    video_ids = get_video_ids(search_name, pages)
+
+    # search_name = '大东彦'
+    # pages = 5  # Number of pages to scrape
+    # video_ids = get_video_ids(search_name, pages)
+
+    search_name = 'B站首页推荐'
+    num_bvids = 10
+    video_ids = get_homepage_bvids(ps=num_bvids)
+
     print(f"Found {len(video_ids)} videos to scrape.")
     all_videos_data = []
 
