@@ -24,6 +24,7 @@ def get_video_ids(search_name, pages):
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
         # 'Host': 'api.bilibili.com',
         # 'Referer': f'https://www.bilibili.com'
+        'cookie' : r"buvid4=2048BC2C-D43E-E27A-10F8-D07A2E1CE49444643-024011402-UFC7YtxT%2Bx4AuetofCOgEg%3D%3D; is-2022-channel=1; enable_web_push=DISABLE; header_theme_version=CLOSE; CURRENT_BLACKGAP=0; DedeUserID=1683525074; DedeUserID__ckMd5=002e084d4aaa1ae9; buvid3=EDD3F1BF-5CE8-35C6-722F-D7A2FDD5718185396infoc; b_nut=1736736885; _uuid=710AE8A10C-3259-CC7C-B2A5-106A2E8CF8DC802512infoc; hit-dyn-v2=1; rpdid=|(JJmY)YRu~m0J'u~Jm~)l|ll; LIVE_BUVID=AUTO4217410661369507; buvid_fp=b0394cd9ce338cde1a2637ebb827f2c7; enable_feed_channel=ENABLE; CURRENT_QUALITY=80; home_feed_column=5; fingerprint=c330d8e9ea37dd963bb3c7dce0fa84ab; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDkyODY0MDAsImlhdCI6MTc0OTAyNzE0MCwicGx0IjotMX0.C__60Mw4KR-oxmAgYtaFNiH2eKPhIC0vG494V1H5Mgk; bili_ticket_expires=1749286340; SESSDATA=07d69450%2C1764640057%2C15386%2A62CjC-O2ghoasb974P5UKmaOfRdPysBoFPdono7EDSv_G8Sk-cQVn1_qbWCZgXVY_v0RcSVjVYUlotMTI2MmdYRUhvYnRnSm1pRkNQemtlVTRycW1XTkJKc1VLOW5PSnVaQXN2VFFMdG9aaU9Wb1VYUGZha3JxX1dBYWZuZHBYcEVMaHo1dmZuM2tRIIEC; bili_jct=296a796bd3f42923db1fd6daf3539dea; sid=6omyaf5x; browser_resolution=1552-852; bsource=search_bing; b_lsid=E8B6B1E8_1974019322C; bp_t_offset_1683525074=1074992716045090816; PVID=16; CURRENT_FNVAL=4048"
     }
     for page in range(1, pages):
         print(f'正在获取第{page}页的视频ID')
@@ -60,6 +61,7 @@ def get_homepage_bvids(ps=10):
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
         # 'Host': 'api.bilibili.com',
         # 'Referer': f'https://www.bilibili.com/'
+        'cookie' : r"buvid4=2048BC2C-D43E-E27A-10F8-D07A2E1CE49444643-024011402-UFC7YtxT%2Bx4AuetofCOgEg%3D%3D; is-2022-channel=1; enable_web_push=DISABLE; header_theme_version=CLOSE; CURRENT_BLACKGAP=0; DedeUserID=1683525074; DedeUserID__ckMd5=002e084d4aaa1ae9; buvid3=EDD3F1BF-5CE8-35C6-722F-D7A2FDD5718185396infoc; b_nut=1736736885; _uuid=710AE8A10C-3259-CC7C-B2A5-106A2E8CF8DC802512infoc; hit-dyn-v2=1; rpdid=|(JJmY)YRu~m0J'u~Jm~)l|ll; LIVE_BUVID=AUTO4217410661369507; buvid_fp=b0394cd9ce338cde1a2637ebb827f2c7; enable_feed_channel=ENABLE; CURRENT_QUALITY=80; home_feed_column=5; fingerprint=c330d8e9ea37dd963bb3c7dce0fa84ab; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDkyODY0MDAsImlhdCI6MTc0OTAyNzE0MCwicGx0IjotMX0.C__60Mw4KR-oxmAgYtaFNiH2eKPhIC0vG494V1H5Mgk; bili_ticket_expires=1749286340; SESSDATA=07d69450%2C1764640057%2C15386%2A62CjC-O2ghoasb974P5UKmaOfRdPysBoFPdono7EDSv_G8Sk-cQVn1_qbWCZgXVY_v0RcSVjVYUlotMTI2MmdYRUhvYnRnSm1pRkNQemtlVTRycW1XTkJKc1VLOW5PSnVaQXN2VFFMdG9aaU9Wb1VYUGZha3JxX1dBYWZuZHBYcEVMaHo1dmZuM2tRIIEC; bili_jct=296a796bd3f42923db1fd6daf3539dea; sid=6omyaf5x; browser_resolution=1552-852; bsource=search_bing; b_lsid=E8B6B1E8_1974019322C; bp_t_offset_1683525074=1074992716045090816; PVID=16; CURRENT_FNVAL=4048"
     }
     resp = requests.get(url, headers=headers)
     if resp.status_code != 200:
@@ -82,9 +84,14 @@ def main():
     # pages = 5  # Number of pages to scrape
     # video_ids = get_video_ids(search_name, pages)
 
+    num_pages = 5
     search_name = 'B站首页推荐'
     num_bvids = 10
-    video_ids = get_homepage_bvids(ps=num_bvids)
+    video_ids = []
+    for _ in range(num_pages):
+        print(f"Fetching video IDs from page {_ + 1} of {num_pages}...")
+        video_ids.extend(get_homepage_bvids(ps=num_bvids))
+        time.sleep(10)
 
     print(f"Found {len(video_ids)} videos to scrape.")
     all_videos_data = []
