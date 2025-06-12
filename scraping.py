@@ -4,7 +4,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-def scrape_bilibili_video(video_id):
+def scrape_bilibili_video(video_id, prefix=""):
     """
     Scrape video title and description from a Bilibili video page.
 
@@ -35,11 +35,16 @@ def scrape_bilibili_video(video_id):
     description = data.get('desc', '')
     ptime = data.get('pubdate', 0)
     danmaku = data.get('stat', {}).get('danmaku', 0)
+    reply = data.get('stat', {}).get('reply', 0)
     likes = data.get('stat', {}).get('like', 0)
     coins = data.get('stat', {}).get('coin', 0)
     favorites = data.get('stat', {}).get('favorite', 0)
     shares = data.get('stat', {}).get('share', 0)
     views = data.get('stat', {}).get('view', 0)
+
+    if prefix:
+        if not title.startswith(prefix):
+            return None
 
     # 获取 up 主粉丝数
     author_followers = None
@@ -51,12 +56,15 @@ def scrape_bilibili_video(video_id):
         if follow_resp.status_code == 200:
             follow_data = follow_resp.json().get('data', {})
             author_followers = follow_data.get('follower', None)
+    
+    print(f"Scraped video: {title} (BVID: {video_id})")
 
     return {
         'title': title,
         'description': description,
         'ptime': ptime,
         'danmaku': danmaku,
+        'reply': reply,
         'likes': likes,
         'coins': coins,
         'favorites': favorites,
@@ -69,5 +77,5 @@ def scrape_bilibili_video(video_id):
 # Example usage:
 if __name__ == "__main__":
     video_id = 'BV155j2z7Etd'
-    video_data = scrape_bilibili_video(video_id)
+    video_data = scrape_bilibili_video(video_id, "")
     print(video_data)
